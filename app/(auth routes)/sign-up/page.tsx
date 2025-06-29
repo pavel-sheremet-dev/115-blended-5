@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 import css from './SignUp.module.css';
 
-// export const dynamic = 'force-static';
+export const dynamic = 'force-static';
 
 export default function SignUp() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function SignUp() {
   };
 
   return (
-    <>
+    <main className={css.mainContent}>
       <h1 className={css.formTitle}>Sign up</h1>
       <form action={handleSubmit} className={css.form}>
         <div className={css.formGroup}>
@@ -52,6 +52,6 @@ export default function SignUp() {
         </div>
       </form>
       {error && <p>{error}</p>}
-    </>
-  );
+    </main>
+  s);
 }

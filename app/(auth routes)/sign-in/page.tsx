@@ -30,7 +30,7 @@ export default function SignIn() {
   };
 
   return (
-    <>
+    <main className={css.mainContent}>
       <h1 className={css.formTitle}>Sign in</h1>
       <form action={handleSubmit} className={css.form}>
         <div className={css.formGroup}>
@@ -51,6 +51,6 @@ export default function SignIn() {
 
         {error && <p className={css.error}>{error}</p>}
       </form>
-    </>
+    </main>
   );
 }
