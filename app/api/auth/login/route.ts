@@ -9,19 +9,19 @@ export async function POST(req: NextRequest) {
 
   const cookieStore = await cookies();
   const setCookie = apiRes.headers['set-cookie'];
+
   if (setCookie) {
     const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
-    let accessToken = '';
-    let refreshToken = '';
-
     for (const cookieStr of cookieArray) {
       const parsed = parse(cookieStr);
-      if (parsed.accessToken) accessToken = parsed.accessToken;
-      if (parsed.refreshToken) refreshToken = parsed.refreshToken;
+      const options = {
+        expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
+        path: parsed.Path,
+        maxAge: Number(parsed['Max-Age']),
+      };
+      if (parsed.accessToken) cookieStore.set('accessToken', parsed.accessToken, options);
+      if (parsed.refreshToken) cookieStore.set('refreshToken', parsed.refreshToken, options);
     }
-
-    if (accessToken) cookieStore.set('accessToken', accessToken);
-    if (refreshToken) cookieStore.set('refreshToken', refreshToken);
 
     return NextResponse.json(apiRes.data);
   }
