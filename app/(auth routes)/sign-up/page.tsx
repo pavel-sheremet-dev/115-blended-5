@@ -53,5 +53,5 @@ export default function SignUp() {
       </form>
       {error && <p>{error}</p>}
     </main>
-  s);
+  );
 }
