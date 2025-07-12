@@ -1,11 +1,12 @@
 'use client';
 
-import { AuthRequest, login } from '@/lib/api/clientApi';
+import { login } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import css from './SignIn.module.css';
+import { CreateUserData } from '@/lib/api/api';
 
 export default function SignIn() {
   const [error, setError] = useState('');
@@ -15,8 +16,10 @@ export default function SignIn() {
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      const formValues = Object.fromEntries(formData) as AuthRequest;
-      const res = await login(formValues);
+      const formValues = Object.fromEntries(formData) as unknown;
+      const data = formValues as CreateUserData;
+
+      const res = await login(data);
       if (res) {
         setUser(res);
         router.replace('/profile');

@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import css from './EditProfile.module.css';
-import { checkSession, getMe, updateMe } from '@/lib/api/clientApi';
+import { updateUser } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 
 export default function EditProfileClient() {
@@ -12,45 +11,12 @@ export default function EditProfileClient() {
 
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
-  const clearIsAuthenticated = useAuthStore((state) => state.clearIsAuthenticated);
 
-  const [newUsername, setNewUsername] = useState('');
-
-  useEffect(() => {
-    if (user) {
-      setNewUsername(user.username || '');
-      return;
-    }
-
-    const fetchUser = async () => {
-      try {
-        await checkSession();
-        const fetchedUser = await getMe();
-        if (fetchedUser) {
-          setUser(fetchedUser);
-          setNewUsername(fetchedUser.username || '');
-        }
-      } catch {
-        clearIsAuthenticated();
-      }
-    };
-
-    fetchUser();
-  }, [user, setUser, clearIsAuthenticated]);
-
-  const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewUsername(e.target.value);
-  };
-
-  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSubmit = async (formData: FormData) => {
+    const username = formData.get('username') as string;
     try {
-      await updateMe({ username: newUsername });
-      if (user) {
-        setUser({ ...user, username: newUsername });
-      }
-      router.push('/profile');
+      const user = await updateUser({ username });
+      setUser(user);
     } catch (error) {
       console.error(error);
     }
@@ -75,14 +41,14 @@ export default function EditProfileClient() {
           className={css.avatar}
         />
 
-        <form onSubmit={handleSave} className={css.profileInfo}>
+        <form action={handleSubmit} className={css.profileInfo}>
           <div className={css.usernameWrapper}>
             <label htmlFor="username">Username:</label>
             <input
               id="username"
               type="text"
-              value={newUsername}
-              onChange={handleUsernameChange}
+              name="username"
+              defaultValue={user.username}
               className={css.input}
             />
           </div>

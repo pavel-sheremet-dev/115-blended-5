@@ -1,8 +1,5 @@
-export type User = {
-  id: string;
+export interface User {
   email: string;
-  username?: string;
+  username: string;
   avatar: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
+}

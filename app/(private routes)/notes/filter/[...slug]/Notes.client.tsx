@@ -8,25 +8,23 @@ import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import { fetchNotes } from '@/lib/api/clientApi';
 import Link from 'next/link';
-import { Tag } from '@/types/note';
 
 import css from './page.module.css';
+import { useParams } from 'next/navigation';
 
-interface NotesClientProps {
-  tag: Tag | string;
-}
-
-export default function NotesClient({ tag }: NotesClientProps) {
+export default function NotesClient() {
+  const { slug } = useParams<{ slug: string[] }>();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const tag = slug[0];
 
   const { data } = useQuery({
     queryKey: ['notes', searchQuery, currentPage, tag],
     queryFn: () =>
       fetchNotes({
-        search: searchQuery,
+        searchText: searchQuery,
         page: currentPage,
-        ...(tag !== 'All' && { tag }),
+        tag: tag === 'All' ? '' : tag,
       }),
     placeholderData: keepPreviousData,
   });

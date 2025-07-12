@@ -6,9 +6,11 @@ import { logout } from '@/lib/api/clientApi';
 import { useRouter } from 'next/navigation';
 
 import css from './AuthNavigation.module.css';
+import TagsMenu from '../TagsMenu/TagsMenu';
 
 export default function AuthNavigation() {
-  const { isAuthenticated, user } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const clearIsAuthenticated = useAuthStore((state) => state.clearIsAuthenticated);
   const router = useRouter();
 
@@ -18,22 +20,27 @@ export default function AuthNavigation() {
     router.push('/sign-in');
   };
 
-  return isAuthenticated ? (
-    <>
-      <li className={css.navigationItem}>
-        <Link href="/profile" className={css.navigationLink}>
-          Profile
-        </Link>
-      </li>
+  if (isAuthenticated)
+    return (
+      <>
+        <li className={css.navigationItem}>
+          <TagsMenu />
+        </li>
+        <li className={css.navigationItem}>
+          <Link href="/profile" className={css.navigationLink}>
+            Profile
+          </Link>
+        </li>
+        <li className={css.navigationItem}>
+          <p className={css.userEmail}>{user?.username}</p>
+          <button onClick={handleLogout} className={css.logoutButton}>
+            Logout
+          </button>
+        </li>
+      </>
+    );
 
-      <li className={css.navigationItem}>
-        <p className={css.userEmail}>{user?.email}</p>
-        <button onClick={handleLogout} className={css.logoutButton}>
-          Logout
-        </button>
-      </li>
-    </>
-  ) : (
+  return (
     <>
       <li className={css.navigationItem}>
         <Link href="/sign-in" className={css.navigationLink}>
