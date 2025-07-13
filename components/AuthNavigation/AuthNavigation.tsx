@@ -2,8 +2,10 @@
 import { logout } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AuthNavigation() {
+  const router = useRouter();
   // логаут
   // очистка стану аутентифікації
   // перенаправлення
@@ -13,8 +15,13 @@ export default function AuthNavigation() {
   const clearIsAuthenticated = useAuthStore((state) => state.clearIsAuthenticated);
 
   const handleLogout = async () => {
-    await logout();
-    clearIsAuthenticated();
+    try {
+      await logout();
+      clearIsAuthenticated();
+      router.replace('/sign-in');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (!isAuthenticated) {
