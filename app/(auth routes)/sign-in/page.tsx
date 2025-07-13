@@ -21,9 +21,13 @@ export default function SignIn() {
       password,
     };
 
-    const user = await login(userData);
-    setUser(user);
-    router.replace('/profile');
+    try {
+      const user = await login(userData);
+      setUser(user);
+      router.replace('/profile');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
