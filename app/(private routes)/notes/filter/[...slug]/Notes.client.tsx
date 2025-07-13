@@ -29,12 +29,6 @@ export default function NotesClient() {
   return (
     <main>
       <section>
-        <header className={css.toolbar}>
-          <Link className={css.button} href={'/notes/action/create'}>
-            Create note +
-          </Link>
-        </header>
-
         {isSuccess && data.notes.length > 0 && <>{JSON.stringify(data.notes)}</>}
       </section>
     </main>
