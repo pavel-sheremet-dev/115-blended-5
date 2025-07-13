@@ -5,6 +5,7 @@ import { Roboto } from 'next/font/google';
 
 import 'modern-normalize';
 import './globals.css';
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -22,8 +23,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={roboto.variable}>
         <TanStackProvider>
-          <Header />
-          {children}
+          <AuthProvider>
+            <Header />
+            {children}
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>

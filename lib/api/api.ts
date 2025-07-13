@@ -1,7 +1,7 @@
 import { Note } from '@/types/note';
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3000/api';
+const baseURL = process.env.NEXT_PUBLIC_API_URL + '/api';
 
 export const nextServer = axios.create({
   baseURL,
@@ -20,7 +20,7 @@ export interface FetchNotesResponse {
   totalPages: number;
 }
 
-export interface CreateUserData {
+export interface AuthUserData {
   email: string;
   password: string;
 }

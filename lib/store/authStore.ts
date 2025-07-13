@@ -13,6 +13,21 @@ export const useAuthStore = create<AuthStore>()((set) => {
     user: null,
     isAuthenticated: false,
     setUser: (user) => set(() => ({ user: user, isAuthenticated: !!user })),
-    clearIsAuthenticated: () => set(() => ({ user: null, isAuthenticated: false })),
+    clearIsAuthenticated: () =>
+      set(() => {
+        return {
+          user: null,
+          isAuthenticated: false,
+        };
+      }),
   };
 });
+
+// export const useAuthStore = create<AuthStore>()((set) => {
+//   return {
+//     user: null,
+//     isAuthenticated: false,
+//     setUser: (user) => set(() => ({ user: user, isAuthenticated: !!user })),
+//     clearIsAuthenticated: () => set(() => ({ user: null, isAuthenticated: false })),
+//   };
+// });
