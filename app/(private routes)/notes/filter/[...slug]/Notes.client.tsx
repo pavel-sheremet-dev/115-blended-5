@@ -5,7 +5,6 @@ import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 import { fetchNotes } from '@/lib/api/clientApi';
 
-import css from './page.module.css';
 import { useParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 
