@@ -15,9 +15,9 @@ export default function NotesClient() {
   const tag = slug[0];
 
   const onChangeQuery = useDebouncedCallback((query) => {
-    setSearchQuery(query)
-    setCurrentPage(1)
-  }, 500)
+    setSearchQuery(query);
+    setCurrentPage(1);
+  }, 500);
 
   const { data, isSuccess, isError } = useQuery({
     queryKey: ['notes', searchQuery, currentPage, tag],
@@ -33,7 +33,7 @@ export default function NotesClient() {
   return (
     <main>
       <section>
-        <input onChange={e => onChangeQuery(e.target.value)} /> 
+        <input onChange={(e) => onChangeQuery(e.target.value)} />
         {isSuccess && data.notes.length > 0 && <>{JSON.stringify(data.notes)}</>}
         {isError && <div>OOOPS</div>}
       </section>

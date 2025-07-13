@@ -1,30 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { api } from '../api';
 import { cookies } from 'next/headers';
+import { isAxiosError } from 'axios';
 
 export async function GET(request: NextRequest) {
-  const cookieStore = await cookies();
-  const search = request.nextUrl.searchParams.get('search') ?? '';
-  const page = Number(request.nextUrl.searchParams.get('page') ?? 1);
-  const rawTag = request.nextUrl.searchParams.get('tag') ?? '';
-  const tag = rawTag === 'All' ? '' : rawTag;
+  try {
+    const cookieStore = await cookies();
+    const search = request.nextUrl.searchParams.get('search') ?? '';
+    const page = Number(request.nextUrl.searchParams.get('page') ?? 1);
+    const rawTag = request.nextUrl.searchParams.get('tag') ?? '';
+    const tag = rawTag === 'All' ? '' : rawTag;
 
-  const { data } = await api('/notes', {
-    params: {
-      ...(search !== '' && { search }),
-      page,
-      perPage: 12,
-      ...(tag && { tag }),
-    },
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
-  if (data) {
-    return NextResponse.json(data);
+    const { data } = await api('/notes', {
+      params: {
+        ...(search !== '' && { search }),
+        page,
+        perPage: 12,
+        ...(tag && { tag }),
+      },
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+    if (data) {
+      return NextResponse.json(data);
+    }
+
+    return NextResponse.json({ error: 'Failed to fetch notes' }, { status: 500 });
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.log('API HANDLER: /auth/register  ', error.response?.data);
+      return NextResponse.json(
+        { error: error.message, response: error.response?.data },
+        { status: error.status }
+      );
+    }
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.name }, { status: 500 });
+    }
   }
-
-  return NextResponse.json({ error: 'Failed to fetch notes' }, { status: 500 });
 }
 
 export async function POST(request: NextRequest) {
