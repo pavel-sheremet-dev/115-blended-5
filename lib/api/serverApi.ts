@@ -4,7 +4,7 @@ import { Note } from '@/types/note';
 import { nextServer as api, FetchNotesProps, FetchNotesResponse, SessionResponseData } from './api';
 
 export const fetchNotes = async ({
-  searchText = '',
+  search = '',
   page = 1,
   perPage = 12,
   tag = '',
@@ -12,7 +12,7 @@ export const fetchNotes = async ({
   const cookieStore = await cookies();
   const response = await api.get<FetchNotesResponse>('/notes', {
     params: {
-      ...(searchText !== '' ? { search: searchText } : {}),
+      ...(search !== '' ? { search } : {}),
       ...(tag ? { tag } : {}),
       page,
       perPage,

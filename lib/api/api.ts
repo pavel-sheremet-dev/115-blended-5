@@ -9,7 +9,7 @@ export const nextServer = axios.create({
 });
 
 export interface FetchNotesProps {
-  searchText?: string;
+  search?: string;
   page?: number;
   perPage?: number;
   tag: string;
