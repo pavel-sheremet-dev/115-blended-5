@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 import { fetchNotes } from '@/lib/api/clientApi';
-import Link from 'next/link';
 
 import css from './page.module.css';
 import { useParams } from 'next/navigation';
