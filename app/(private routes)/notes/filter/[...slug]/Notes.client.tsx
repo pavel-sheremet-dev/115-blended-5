@@ -8,14 +8,20 @@ import Link from 'next/link';
 
 import css from './page.module.css';
 import { useParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function NotesClient() {
   const { slug } = useParams<{ slug: string[] }>();
-  const [currentPage] = useState(1);
-  const [searchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const tag = slug[0];
 
-  const { data, isSuccess } = useQuery({
+  const onChangeQuery = useDebouncedCallback((query) => {
+    setSearchQuery(query)
+    setCurrentPage(1)
+  }, 500)
+
+  const { data, isSuccess, isError } = useQuery({
     queryKey: ['notes', searchQuery, currentPage, tag],
     queryFn: () =>
       fetchNotes({
@@ -29,7 +35,9 @@ export default function NotesClient() {
   return (
     <main>
       <section>
+        <input onChange={e => onChangeQuery(e.target.value)} /> 
         {isSuccess && data.notes.length > 0 && <>{JSON.stringify(data.notes)}</>}
+        {isError && <div>OOOPS</div>}
       </section>
     </main>
   );
